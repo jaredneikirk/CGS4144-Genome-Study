@@ -83,14 +83,15 @@ ggsave(
   file.path("volcano_plot.png")
 )
 
-diffsig <- deseq_df[(deseq_df$pvalue < 0.25 & abs(deseq_df$log2FoldChange) > 0),]
+diffsig <- deseq_df[(deseq_df$pvalue < 0.5 & abs(deseq_df$log2FoldChange) > 0),]
 write.csv(diffsig, "significant_difference.csv")
 # Standardize
 vsd <- vst(ddset, blind = FALSE)
 normalizeExp <- assay(vsd)
 
+library(ComplexHeatmap)
 # HeatMap
-df <- read.csv("significant_diffenrence.csv", header = T)
+df <- read.csv("significant_difference.csv", header = T)
 df02 <- as.character(df$Gene)
 diff_expr <- normalizeExp[df02,]
 ac <- subset(mydf2, select=-c(PatientID))
