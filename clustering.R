@@ -126,7 +126,8 @@ pheatmap(scaledata,
          color = colorRampPalette(c("navy", "white", "firebrick3"))(40))
 
 
-
+# Statistics
+chisq.test(anno$Symptoms, anno$Cluster, correct = FALSE)
 
 
 
