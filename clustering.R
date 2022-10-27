@@ -127,14 +127,29 @@ pheatmap(scaledata,
 
 
 # Statistics
-chisq.test(anno$Symptoms, anno$Cluster, correct = FALSE)
+km_g <- chisq.test(anno$Symptoms, anno$Cluster, correct = FALSE)
 
+# Compare pam and kmeans
+pam_res <- read.csv(file = 'pam_res.csv', header = T)
+pam_km <- chisq.test(anno$Cluster, pam_res$B, correct = FALSE)
 
+# Compare consensus and kmeans
+con_res <- read.csv(file = 'con_res.csv', header = T)
+con_km <- chisq.test(anno$Cluster, con_res$x, correct = FALSE)
 
+# Compare pam and consensus
+con_pam <- chisq.test(pam_res$B, con_res$x, correct = FALSE)
 
+# Adjust p value
+p_values <- c(pam_km[[3]], con_km[[3]], con_pam[[3]])
+p_adjust <- p.adjust(p_values, method = "bonferroni")
 
+df <- anno
+df$PAM <- pam_res$B
+df$Con <- con_res$x
 
+install.packages('GGally')
+library(GGally)
+ggpairs(df)
 
-
-
-
+        
