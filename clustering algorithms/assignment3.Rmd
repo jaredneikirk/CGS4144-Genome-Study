@@ -1,0 +1,69 @@
+---
+title: "assignment3.Rmd"
+output: html_document
+date: "2022-10-25"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r}
+most_var_genes <- read.csv('5000_most_variable_genes.csv')
+```
+
+## Examine genes
+
+```{r}
+genedata <- data.frame(most_var_genes[,-1], row.names=most_var_genes[,1])
+head(genedata, 10)
+```
+## Load Cluster Libraries
+
+```{r}
+library(cluster)
+library(factoextra)
+```
+
+## Find optimal k value for PAM
+
+```{r}
+scaleddata = scale(genedata[,-1])
+fviz_nbclust(scaleddata, pam, method ="silhouette")+theme_minimal()
+
+```
+
+## Perform PAM Clustering with k=2
+
+```{r}
+pamResult <-pam(scaleddata[0:100,], k = 2)
+pamResult
+```
+
+```{r}
+pamResult$medoids
+```
+
+
+```{r}
+pamResult$clustering
+```
+
+## Plot PAM Cluster Plot
+
+```{r}
+options(ggrepel.max.overlaps = 250)
+fviz_cluster(pamResult, 
+             palette =c("#007892","#D9455F"),
+             ellipse.type ="euclid",
+             repel =TRUE,
+             main = "PAM Cluster plot",
+             ggtheme =theme_minimal())
+```
+
