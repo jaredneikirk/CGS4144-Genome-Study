@@ -140,6 +140,10 @@ con_km <- chisq.test(anno$Cluster, con_res$x, correct = FALSE)
 # Compare pam and consensus
 con_pam <- chisq.test(pam_res$B, con_res$x, correct = FALSE)
 
+
+chisq.test(anno$Symptoms, pam_res$B, correct = FALSE)
+chisq.test(anno$Symptoms, con_res$x, correct = FALSE)
+
 # Adjust p value
 p_values <- c(pam_km[[3]], con_km[[3]], con_pam[[3]])
 p_adjust <- p.adjust(p_values, method = "bonferroni")
